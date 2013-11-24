@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Unicode progress bars</title>
+<style>
+table { margin-top: 2em; border-spacing: 1em 0; }
+tr { white-space: nowrap; }
+
+#sans-serif { font-size: 14px; line-height: 18px; }
+#sans-serif tr > :nth-child(1) { font-family: "Helvetica Neue" }
+#sans-serif tr > :nth-child(2) { font-family: Arial }
+#sans-serif tr > :nth-child(3) { font-family: sans-serif }
+
+#serif { font-size: 22px; line-height: 28px; }
+#serif tr > :nth-child(1) { font-family: Georgia }
+#serif tr > :nth-child(2) { font-family: "Times New Roman" }
+#serif tr > :nth-child(3) { font-family: serif }
+</style>
+<script>
+var bar_styles = [
+    '▁▂▃▄▅▆▇█',
+    '⣀⣄⣤⣦⣶⣷⣿',
+    '⣀⣄⣆⣇⣧⣷⣿',
+    '○◔◐◕⬤',
+    '□◱◧▣■',
+    '□◱▨▩■',
+    '□◱▥▦■',
+    '░▒▓█',
+    '░█',
+    '⬜⬛',
+    '▱▰',
+    '▭◼',
+    '▯▮',
+    '◯⬤',
+    '⚪⚫',
+];
+function repeat(s, i) {
+    var r = '';
+    for(var j=0; j<i; j++) r += s;
+    return r;
+}
+function make_bar(p, bar_style) {
+    var d, full, m, middle, r, rest, x,
+        min_delta = Number.POSITIVE_INFINITY,
+        full_symbol = bar_style[bar_style.length-1],
+        n = bar_style.length - 1;
+    if(p == 100) return repeat(full_symbol, 10);
+    p = p / 100;
+    for(var i=13; i>7; i--) {
+        x = p * i;
+        full = Math.floor(x);
+        rest = x - full;
+        middle = Math.floor(rest * n);
+        if(p != 0 && full == 0 && middle == 0) middle = 1;
+        d = Math.abs(p - (full+middle/n)/i) * 100;
+        if(d < min_delta) {
+            min_delta = d;
+            m = bar_style[middle];
+            if(full == i) m = '';
+            r = repeat(full_symbol, full) + m + repeat(bar_style[0], i-full-1);
+        }
+    }
+    return r;
+}
+function generate() {
+    var r1 = document.getElementById('sans-serif-body'),
+        r2 = document.getElementById('serif-body'),
+        p = document.getElementById('percentage').value;
+    document.getElementById('sans-serif').style.display = 'table';
+    document.getElementById('serif').style.display = 'table';
+    r1.innerHTML = '';
+    r2.innerHTML = '';
+    for(var i=0; i<bar_styles.length; i++) {
+        bar_style = bar_styles[i];
+        bar = make_bar(p, bar_style);
+        row = '<tr>'+repeat('<td>'+bar+' '+p+'%</td>', 3)+'</tr>'
+        r1.innerHTML += row;
+        r2.innerHTML += row;
+    }
+}
+</script>
+</head>
+<body>
+
+<form onsubmit="generate(); return false">
+<input type="number" placeholder="Percentage" min=1 max=100 id="percentage" />
+<input type="submit" value="Generate" />
+</form>
+
+<table id="sans-serif" style="display: none">
+<thead><tr><th>Helvetica Neue<th>Arial<th>sans-serif</thead>
+<tbody id="sans-serif-body"></tbody>
+</table>
+
+<table id="serif" style="display: none">
+<thead><tr><th>Georgia<th>Times New Roman<th>serif</thead>
+<tbody id="serif-body"></tbody>
+</table>
+
+</body>
+</html>
