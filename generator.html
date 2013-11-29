@@ -62,7 +62,7 @@ function make_bar(p, bar_style, min_size, max_size) {
         min_delta = Number.POSITIVE_INFINITY,
         full_symbol = bar_style[bar_style.length-1],
         n = bar_style.length - 1;
-    if(p == 100) return repeat(full_symbol, 10);
+    if(p == 100) return {str: repeat(full_symbol, 10), delta: 0};
     p = p / 100;
     for(var i=max_size; i>=min_size; i--) {
         x = p * i;
@@ -78,7 +78,7 @@ function make_bar(p, bar_style, min_size, max_size) {
             r = repeat(full_symbol, full) + m + repeat(bar_style[0], i-full-1);
         }
     }
-    return r;
+    return {str: r, delta: min_delta};
 }
 function generate() {
     var r1 = document.getElementById('sans-serif-body'),
@@ -90,10 +90,15 @@ function generate() {
     document.getElementById('serif').style.display = 'table';
     r1.innerHTML = '';
     r2.innerHTML = '';
+    var bars = [];
     for(var i=0; i<bar_styles.length; i++) {
-        bar_style = bar_styles[i];
-        bar = make_bar(p, bar_style, min_size, max_size);
-        row = '<tr>'+repeat('<td>'+bar+' '+p+'%</td>', 3)+'</tr>'
+        bars.push(make_bar(p, bar_styles[i], min_size, max_size));
+    }
+    bars.sort(function (a, b) { return a.delta - b.delta; });
+    for(var i=0; i<bars.length; i++) {
+        bar = '<td>'+bars[i].str+' '+p+'%</td>';
+        delta = '<td>'+bars[i].delta.toPrecision(2)+'%</td>';
+        row = '<tr>'+repeat(bar, 3)+delta+'</tr>'
         r1.innerHTML += row;
         r2.innerHTML += row;
     }
@@ -118,12 +123,12 @@ function generate() {
 <noscript>This application requires JavaScript.</noscript>
 
 <table id="sans-serif" style="display: none">
-<thead><tr><th>Helvetica Neue<th>Arial<th>sans-serif</thead>
+<thead><tr><th>Helvetica Neue<th>Arial<th>sans-serif<th>Delta</thead>
 <tbody id="sans-serif-body"></tbody>
 </table>
 
 <table id="serif" style="display: none">
-<thead><tr><th>Georgia<th>Times New Roman<th>serif</thead>
+<thead><tr><th>Georgia<th>Times New Roman<th>serif<th>Delta</thead>
 <tbody id="serif-body"></tbody>
 </table>
 
