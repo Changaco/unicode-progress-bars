@@ -4,6 +4,17 @@
 <title>Unicode progress bars</title>
 <meta charset="utf-8"/>
 <style>
+noscript {
+    display: inline-block;
+    margin: 1em 0;
+    padding: 8px 14px;
+    color: #b94a48;
+    background-color: #f2dede;
+    border-color: #eed3d7;
+    border-radius: 4px;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
 table { margin-top: 2em; border-spacing: 1em 0; }
 tr { white-space: nowrap; }
 
@@ -98,6 +109,8 @@ function generate() {
 <label>Max size: <input type="number" min=1 value=13 id="max-size" /></label>
 <input type="submit" value="Generate" />
 </form>
+
+<noscript>This application requires JavaScript.</noscript>
 
 <table id="sans-serif" style="display: none">
 <thead><tr><th>Helvetica Neue<th>Arial<th>sans-serif</thead>
