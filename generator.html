@@ -15,6 +15,9 @@ noscript {
     text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
 }
 
+body { margin: 0; padding: 0; display: inline-block; min-width: 100%; }
+#container { padding: 0 10px; }
+
 table { margin-top: 2em; border-spacing: 1em 0; }
 tr { white-space: nowrap; }
 
@@ -99,7 +102,9 @@ function generate() {
 </head>
 <body>
 
-<a href="https://github.com/Changaco/unicode-progress-bars"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"></a>
+<a href="https://github.com/Changaco/unicode-progress-bars"><img style="float: right; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"></a>
+
+<div id="container">
 
 <p>This program generates progress bars made of Unicode symbols.</p>
 
@@ -122,5 +127,6 @@ function generate() {
 <tbody id="serif-body"></tbody>
 </table>
 
+</div>
 </body>
 </html>
