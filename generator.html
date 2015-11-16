@@ -114,7 +114,7 @@ function generate() {
 <p>This program generates progress bars made of Unicode symbols.</p>
 
 <form onsubmit="generate(); return false">
-<label>Percentage: <input type="number" min=1 max=100 id="percentage" /></label>
+<label>Percentage: <input type="number" min=1 max=100 step="any" id="percentage" /></label>
 <label>Min size: <input type="number" min=1 value=7 id="min-size" /></label>
 <label>Max size: <input type="number" min=1 value=13 id="max-size" /></label>
 <input type="submit" value="Generate" />
