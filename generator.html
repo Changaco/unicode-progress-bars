@@ -33,6 +33,9 @@ tr { white-space: nowrap; }
 
 input[type=number] { width: 3em; }
 label { display: inline-block; margin-right: 1em; }
+
+.hidden { display: none; }
+
 </style>
 <script>
 var bar_styles = [
@@ -52,6 +55,18 @@ var bar_styles = [
     '◯⬤',
     '⚪⚫',
 ];
+var allOptions = [
+    'percentage',
+    'min-size',
+    'max-size'
+]
+function makeURLToCurrentSettings() {
+    const url = new URL(window.location.href)
+    allOptions.forEach(opt => {
+        url.searchParams.set(opt, document.querySelector(`#${opt}`).value)
+    })
+    return url
+}
 function repeat(s, i) {
     var r = '';
     for(var j=0; j<i; j++) r += s;
@@ -102,6 +117,14 @@ function generate() {
         r1.innerHTML += row;
         r2.innerHTML += row;
     }
+
+    const bookmarkLink = makeURLToCurrentSettings()
+    const bookmarkInput = document.querySelector('#bookmark-link')
+    bookmarkInput.value = bookmarkLink.toString()
+    bookmarkInput.classList.remove('hidden')
+    if (window.location.href !== bookmarkLink.toString()) {
+        window.location.replace(bookmarkLink)
+    }
 }
 </script>
 </head>
@@ -122,6 +145,8 @@ function generate() {
 
 <noscript>This application requires JavaScript.</noscript>
 
+<label>Bookmark Link: <input type="text" id="bookmark-link" class="hidden" size="100"/></label>
+
 <table id="sans-serif" style="display: none">
 <thead><tr><th>Helvetica Neue<th>Arial<th>sans-serif<th>Delta</thead>
 <tbody id="sans-serif-body"></tbody>
@@ -137,12 +162,8 @@ function generate() {
 <script>
     (() => {
         const params = (new URL(window.location.href)).searchParams
-        const options = [
-            'percentage',
-            'min-size',
-            'max-size'
-        ]
-        const preSets = options
+        
+        const preSets = allOptions
             .filter(opt => params.has(opt))
 
         if (preSets.length) {
