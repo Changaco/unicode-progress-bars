@@ -134,4 +134,23 @@ function generate() {
 
 </div>
 </body>
+<script>
+    (() => {
+        const params = (new URL(window.location.href)).searchParams
+        const options = [
+            'percentage',
+            'min-size',
+            'max-size'
+        ]
+        const preSets = options
+            .filter(opt => params.has(opt))
+
+        if (preSets.length) {
+            preSets.forEach(opt => {
+                document.querySelector(`#${opt}`).value = params.get(opt)
+            })
+            generate()
+        }
+    })()
+</script>
 </html>
